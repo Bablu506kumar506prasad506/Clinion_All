@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="67252" started-at="2018-08-03T12:29:33Z" finished-at="2018-08-03T12:30:40Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="67252" started-at="2018-08-03T12:29:33Z" finished-at="2018-08-03T12:30:40Z">
+      <class name="Clinion_Execution.Clinion_StudyWorkflowExecution">
+        <test-method status="PASS" signature="BraoserInit()[pri:0, instance:Clinion_Execution.Clinion_StudyWorkflowExecution@604ed9f0]" name="BraoserInit" is-config="true" duration-ms="8424" started-at="2018-08-03T17:59:33Z" finished-at="2018-08-03T17:59:41Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- BraoserInit -->
+        <test-method status="PASS" signature="SARoleXFeatureMngmt()[pri:0, instance:Clinion_Execution.Clinion_StudyWorkflowExecution@604ed9f0]" name="SARoleXFeatureMngmt" duration-ms="57553" started-at="2018-08-03T17:59:41Z" finished-at="2018-08-03T18:00:39Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- SARoleXFeatureMngmt -->
+        <test-method status="PASS" signature="QuitBrowser()[pri:0, instance:Clinion_Execution.Clinion_StudyWorkflowExecution@604ed9f0]" name="QuitBrowser" is-config="true" duration-ms="1249" started-at="2018-08-03T18:00:39Z" finished-at="2018-08-03T18:00:40Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- QuitBrowser -->
+      </class> <!-- Clinion_Execution.Clinion_StudyWorkflowExecution -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
