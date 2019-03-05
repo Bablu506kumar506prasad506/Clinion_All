@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import Clinion_GlobalMethod.GlobelMethods;
+import Clinion_StudyWorkflow.StudyAdminTasksRolesManagement;
 import Clinion_StudyWorkflow.StudyAdminTasksRolesXFeatureMNGMT;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -27,11 +28,11 @@ public class Clinion_StudyWorkflowExecution {
 		
 	}
 	
-	/*@Test
+	@Test(enabled=false)
 	public void SARoleManagement() throws Exception{
 		StudyAdminTasksRolesManagement SARM = new StudyAdminTasksRolesManagement();
 		SARM.StudyAdmin_RoleManagement();
-	}*/
+	}
 	
 	@Test
 	public void SARoleXFeatureMngmt() throws Exception{

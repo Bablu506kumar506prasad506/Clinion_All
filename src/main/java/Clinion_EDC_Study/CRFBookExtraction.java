@@ -2,7 +2,6 @@ package Clinion_EDC_Study;
 
 import java.io.FileInputStream;
 
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;

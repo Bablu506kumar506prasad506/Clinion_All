@@ -33,50 +33,50 @@ public class Clinion_StudyConfigExecutionClass {
 		
 	}
 	
-	/*@Test (priority=0)
+	@Test (priority=0)
 	public static void forgotpassword_Methd() throws Exception{
 		forgotpasswordClass fr = new forgotpasswordClass();
 		fr.forgotpasswordM();
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void CAAdminTask_Methd() throws Exception{
 		
 		CentralAdminTasksRolesManagement CATRM = new CentralAdminTasksRolesManagement();
 		CATRM.CARoleManagement();
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void RoleXFeatureMNGMT_Mthd() throws Exception{
 		CentralAdminTasksRolesXFeatureMNGMT RXFM = new CentralAdminTasksRolesXFeatureMNGMT();
 		RXFM.RoleXFeature();
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void RoleXActionMNGMT_Mthd() throws Exception{
 		CentralAdminTasksRolesXActionMNGMT RXAM = new CentralAdminTasksRolesXActionMNGMT();
 		RXAM.CARoleXAction();
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void CAUserManagementPermson() throws Exception{
 		CentralAdminTasksUserMngmtPermission CAUMP = new CentralAdminTasksUserMngmtPermission();
 		CAUMP.CAUserMNGMTPRMSON();
 	}
 	
-	@Test
+	@Test(enabled=false)
 	public void CreateUser() throws Exception{
 		CentralAdminTasksCreateUsersClass CACU = new CentralAdminTasksCreateUsersClass();
 		CACU.CACreateUsers();
-	}*/
+	}
 	
 	
 	
-	/*@Test
+	@Test(enabled=false)
 	public void SC_ConditionalBranching() throws Exception{
 		StudyConfiguration_ConditionalBranching SCCB = new StudyConfiguration_ConditionalBranching();
 		SCCB.Config_ConditionalBranching();
-	}*/
+	}
 	
 	@AfterMethod
 	public void quitToBrowser(){

@@ -1,14 +1,29 @@
 package Clinion_EDC_Study;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
+
+import com.thoughtworks.selenium.webdriven.commands.IsAlertPresent;
 
 import Clinion_GlobalMethod.Clinion_WaitMethod;
 import Clinion_GlobalMethod.GlobelMethods;
@@ -23,6 +38,9 @@ public class CRFDataExtraction {
 
 	Clinion_WaitMethod GWait = new Clinion_WaitMethod(GlobelMethods.driver);
 	Actions action = new Actions(GlobelMethods.driver);
+	JavascriptExecutor js = (JavascriptExecutor)GlobelMethods.driver;
+	
+	public static String PNL_Data;
 
 	public void eCRFDataExtraction_PanelWise() throws Exception {
 
@@ -34,12 +52,13 @@ public class CRFDataExtraction {
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 
 		String PNLID = "ctl07_gvPanelDataExtraction_ctl02_lnkScreen1";
-
+		String PNLXpath = "//tr[2]/td/div/table/tbody/tr[1]/th/table/tbody/tr/th";
+//		                ctl00_ContentPlaceHolder1_gvPanelDataExtraction
 		// ----Panel Wise eCRF data extraction----//
-		WebElement idpanl = GWait.Wait_GetElementById(PNLID, 120);
-
-		if (idpanl.getText().equals("Date of Visit")) {
-			WebElement table_element = GWait.Wait_GetElementByCSS("#ctl07_gvPanelDataExtraction");
+		WebElement idpanl = GWait.Wait_GetElementByXpath(PNLXpath, 120);
+		System.out.println("Panel Header Name: "+idpanl.getText());
+		if (idpanl.getText().equals("Panel Names")) {
+			WebElement table_element = GWait.Wait_GetElementByXpath("//table[contains(@id,'gvPanelDataExtraction')]");
 			ArrayList<WebElement> rows = (ArrayList<WebElement>) table_element.findElements(By.tagName("tr"));
 			System.out.println("Rows count: " + rows.size());
 
@@ -51,37 +70,43 @@ public class CRFDataExtraction {
 			System.out.println("Rows count: " + rows.size());
 			for (int i = 01; i <= rowcounrt - 1; i++) {
 
-				String PNL_Data = st.getCell(2, i).getContents();
+				PNL_Data = st.getCell(2, i).getContents();
 				System.out.println("Panel Data: " + PNL_Data);
 
 				for (int j = 02; j < rows.size() - 1; j++) {
 					if (j <= 9) {
 						WebElement link = GWait
-								.Wait_GetElementById("ctl07_gvPanelDataExtraction_ctl0" + j + "_lnkScreen1", 120);
+								.Wait_GetElementByXpath("//a[contains(@id,'gvPanelDataExtraction_ctl0" + j + "_lnkScreen1')]", 120);
 						System.out.println(link);
 						String linktext = link.getText();
 						System.out.println("LinkData: " + linktext);
 						if (linktext.equalsIgnoreCase(PNL_Data)) {
 							link.click();
-							GlobelMethods.AcceptDoenloadPopup();
-							GlobelMethods.isAlertPresent();
+							
+								GlobelMethods.AcceptDoenloadPopup();
+								GlobelMethods.isAlertPresent();
+							
 							break;
 						}
 					} else if (j >= 10) {
 						WebElement link = GWait
-								.Wait_GetElementById("ctl07_gvPanelDataExtraction_ctl" + j + "_lnkScreen1", 120);
+								.Wait_GetElementByXpath("//a[contains(@id,'gvPanelDataExtraction_ctl" + j + "_lnkScreen1')]", 120);
 						System.out.println(link);
 						String linktext = link.getText();
 						System.out.println("LinkData: " + linktext);
 						if (linktext.equalsIgnoreCase(PNL_Data)) {
 							link.click();
-							GlobelMethods.AcceptDoenloadPopup();
+//							GlobelMethods.AcceptDoenloadPopup();
 							GlobelMethods.isAlertPresent();
 							break;
 						}
 					}
 
 				}
+				
+				GlobelMethods gm = new GlobelMethods();
+				gm.PanelWiseMainDataVerification_M();
+				
 
 			}
 			GWait.Wait_GetElementByLinkText("Logout").click();
@@ -98,12 +123,13 @@ public class CRFDataExtraction {
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 
 		String PAGID = "ctl07_gvCrf_ctl02_lnkScreen";
-
+		String PAGXpath = "//table[contains(@id,'_gvCrf')]/tbody/tr[1]/th/table/tbody/tr/th[1]";
+						////*[@id="ctl07_gvCrf"]/tbody/tr[1]/th/table/tbody/tr/th[1]
 		// ----Page Wise eCRF data extraction----//
-		WebElement idpage = GWait.Wait_GetElementById(PAGID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(PAGXpath, 120);
 
-		if (idpage.getText().trim().equals("Date Of Visit")) {
-			WebElement table_element = GWait.Wait_GetElementByCSS("#ctl07_gvCrf > tbody");
+		if (idpage.getText().trim().equals("Page Name")) {
+			WebElement table_element = GWait.Wait_GetElementByXpath("//table[contains(@id,'gvCrf')]");
 			ArrayList<WebElement> rows = (ArrayList<WebElement>) table_element.findElements(By.tagName("tr"));
 			System.out.println("Rows count: " + rows.size());
 
@@ -115,35 +141,47 @@ public class CRFDataExtraction {
 			System.out.println("Rows count: " + rowcounrt);
 			for (int i = 01; i <= rowcounrt - 1; i++) {
 
-				String PNL_Data = st.getCell(2, i).getContents();
-				System.out.println("Panel Data: " + PNL_Data);
+				PNL_Data = st.getCell(2, i).getContents();
+				System.out.println("Excel Data: " + PNL_Data);
 
 				for (int j = 02; j < rows.size() - 1; j++) {
 					if (j <= 9) {
-						WebElement link = GWait.Wait_GetElementById("ctl07_gvCrf_ctl0" + j + "_lnkScreen", 120);
+						WebElement link = GWait.Wait_GetElementByXpath("//a[contains(@id,'gvCrf_ctl0" + j + "_')]", 120);
 						System.out.println(link);
 						String linktext = link.getText();
 						System.out.println("LinkData: " + linktext);
 						if (linktext.equalsIgnoreCase(PNL_Data)) {
 							link.click();
+							/*WebElement ExlLink = GWait.Wait_GetElementByXpath("//a[contains(@id,'gvCrf_ctl0" + j + "_lnkXlScreen')]", 120);
+							Thread.sleep(500);
+							ExlLink.click();*/
+							
 							GlobelMethods.AcceptDoenloadPopup();
+							Thread.sleep(2000);
 							GlobelMethods.isAlertPresent();
 							break;
 						}
 					} else if (j >= 10) {
-						WebElement link = GWait.Wait_GetElementById("ctl07_gvCrf_ctl" + j + "_lnkScreen", 120);
+						WebElement link = GWait.Wait_GetElementByXpath("//a[contains(@id,'gvCrf_ctl" + j + "_')]", 120);
 						System.out.println(link);
 						String linktext = link.getText();
 						System.out.println("LinkData: " + linktext);
 						if (linktext.equalsIgnoreCase(PNL_Data)) {
 							link.click();
+							/*WebElement ExlLink = GWait.Wait_GetElementByXpath("//a[contains(@id,'gvCrf_ctl" + j + "_lnkXlScreen')]", 120);
+							Thread.sleep(500);
+							ExlLink.click();*/
 							GlobelMethods.AcceptDoenloadPopup();
+							Thread.sleep(2000);
 							GlobelMethods.isAlertPresent();
 							break;
 						}
 					}
 
 				}
+				
+				GlobelMethods gm = new GlobelMethods();
+				gm.PageWiseMainDataVerification_M();
 
 			}
 			GWait.Wait_GetElementByLinkText("Logout").click();
@@ -161,17 +199,18 @@ public class CRFDataExtraction {
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 
 		String LABPAGID = "ctl07_grdLabPageExtraction_ctl02_lnkScreen";
-
+		String LABPAGXpath = "//tr/td[3]/table/tbody/tr[5]/td/table/tbody/tr[1]/th";
 		// ----Lab Page eCRF data extraction----//
 		Thread.sleep(3500);
 		boolean existsElement;
 		try {
-			existsElement = "ctl07_grdLabPageExtraction_ctl02_lnkScreen" != null;
+			//ctl07_grdLabPageExtraction_ctl02_lnkScreen
+			existsElement = "ctl00_ContentPlaceHolder1_grdLabPageExtraction_ctl02_lnkScreen" != null;
 			if (existsElement==true) {
-				WebElement idpage = GWait.Wait_GetElementById(LABPAGID, 120);
+				WebElement idpage = GWait.Wait_GetElementByXpath(LABPAGXpath, 120);
 
-				if (idpage.getText().trim().equals("Primary Diagnosis")) {
-					WebElement table_element = GWait.Wait_GetElementByCSS("#ctl07_grdLabPageExtraction>tbody");
+				if (idpage.getText().trim().equals("Lab Page Data Extraction")) {
+					WebElement table_element = GWait.Wait_GetElementByXpath("//table[contains(@id,'grdLabPageExtraction')]");
 					ArrayList<WebElement> rows = (ArrayList<WebElement>) table_element.findElements(By.tagName("tr"));
 					System.out.println("Rows count: " + rows.size());
 
@@ -182,37 +221,75 @@ public class CRFDataExtraction {
 					int rowcounrt = st.getRows();
 					System.out.println("Rows count: " + rowcounrt);
 					for (int i = 01; i <= rowcounrt - 1; i++) {
-
 						String PNL_Data = st.getCell(2, i).getContents();
-						System.out.println("Panel Data: " + PNL_Data);
-
 						for (int j = 02; j < rows.size() - 1; j++) {
+							
 							if (j <= 9) {
 								WebElement link = GWait
-										.Wait_GetElementById("ctl07_grdLabPageExtraction_ctl0" + j + "_lnkScreen", 120);
+										.Wait_GetElementByXpath("//a[contains(@id,'grdLabPageExtraction_ctl0" + j + "_')]", 120);
 								System.out.println(link);
-								String linktext = link.getText();
+								String linktext = link.getText().trim();
 								System.out.println("LinkData: " + linktext);
-								if (linktext.equalsIgnoreCase(PNL_Data)) {
+								System.out.println("Panel Data: " + PNL_Data);
+								if (linktext.equalsIgnoreCase(PNL_Data.trim())) {
 									link.click();
-									GlobelMethods.AcceptDoenloadPopup();
+									Thread.sleep(1500);
+									GlobelMethods.driver.switchTo().frame(GlobelMethods.driver.findElement(By.tagName("iframe")));
+									GWait.Wait_GetElementByCSS("#lnkbtndownloadall").click();
 									GlobelMethods.isAlertPresent();
-									break;
+									GlobelMethods.driver.switchTo().defaultContent();
+									GWait.Wait_GetElementByXpath("//div[@id='cboxContent']/div[9]").click();
+									link.click();
+									Thread.sleep(1500);
+									GlobelMethods.driver.switchTo().frame(GlobelMethods.driver.findElement(By.tagName("iframe")));
+									WebElement View = GWait.Wait_GetElementById("gvLabPageExtraction_ctl02_lblprocessing");
+									if (View == null ) {
+										GWait.Wait_GetElementByCSS("#gvLabPageExtraction_ctl02_lnkbtndownLoad").click();
+										GlobelMethods.AcceptDoenloadPopup();
+										GlobelMethods.isAlertPresent();
+										GlobelMethods.driver.switchTo().defaultContent();
+										GWait.Wait_GetElementByXpath("//div[@id='cboxContent']/div[9]").click();
+										break;
+									} else {
+										GlobelMethods.driver.switchTo().defaultContent();
+										GWait.Wait_GetElementByXpath("//div[@id='cboxContent']/div[9]").click();
+									}
+									
 								}
+								
 							} else if (j >= 10) {
 								WebElement link = GWait
-										.Wait_GetElementById("ctl07_grdLabPageExtraction_ctl" + j + "_lnkScreen", 120);
+										.Wait_GetElementByXpath("//a[contains(@id,'grdLabPageExtraction_ctl" + j + "_')]", 120);
 								System.out.println(link);
-								String linktext = link.getText();
+								String linktext = link.getText().trim();
 								System.out.println("LinkData: " + linktext);
-								if (linktext.equalsIgnoreCase(PNL_Data)) {
+								if (linktext.equalsIgnoreCase(PNL_Data.trim())) {
 									link.click();
-									GlobelMethods.AcceptDoenloadPopup();
-									GlobelMethods.isAlertPresent();
-									break;
+									Thread.sleep(1500);
+									GlobelMethods.driver.switchTo().frame(GlobelMethods.driver.findElement(By.tagName("iframe")));
+									GWait.Wait_GetElementByCSS("#lnkbtndownloadall").click();
+									GlobelMethods.isAlertPresent();////div[@id='cboxContent']/div[9]
+									GlobelMethods.driver.switchTo().defaultContent();
+									GWait.Wait_GetElementByXpath("//div[@id='cboxContent']/div[9]").click();
+									link.click();
+									Thread.sleep(1500);
+									GlobelMethods.driver.switchTo().frame(GlobelMethods.driver.findElement(By.tagName("iframe")));
+									WebElement View = GWait.Wait_GetElementById("gvLabPageExtraction_ctl02_lblprocessing");
+									if (View == null ) {
+										GWait.Wait_GetElementByCSS("#gvLabPageExtraction_ctl02_lnkbtndownLoad").click();
+										GlobelMethods.AcceptDoenloadPopup();
+										GlobelMethods.isAlertPresent();
+										GlobelMethods.driver.switchTo().defaultContent();
+										GWait.Wait_GetElementByXpath("//div[@id='cboxContent']/div[9]").click();
+										break;
+									} else {
+										GlobelMethods.driver.switchTo().defaultContent();
+										GWait.Wait_GetElementByXpath("//div[@id='cboxContent']/div[9]").click();
+									}
 								}
+								
 							}
-
+							
 						}
 
 					}
@@ -236,12 +313,12 @@ public class CRFDataExtraction {
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 
-		String DASHBRDID = "ctl07_lnkDashBoardExtraction";
+		String DASHBRDID = "//a[contains(@id,'lnkDashBoardExtraction')]";
 		
 
 		// ----DashBoard Data Extraction----//
 		Thread.sleep(3500);
-		WebElement idpage = GWait.Wait_GetElementById(DASHBRDID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(DASHBRDID, 120);
 		idpage.click();
 		GlobelMethods.isAlertPresent();
 		Thread.sleep(3000);
@@ -258,12 +335,12 @@ public class CRFDataExtraction {
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 
-		String EDTCHKID = "ctl07_lnkEditCheckExtraction";
+		String EDTCHKID = "//a[contains(@id,'lnkEditCheckExtraction')]";
 		
 
 		// ----Edit Checks Extraction----//
 		Thread.sleep(3500);
-		WebElement idpage = GWait.Wait_GetElementById(EDTCHKID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(EDTCHKID, 120);
 		idpage.click();
 		GlobelMethods.isAlertPresent();
 		Thread.sleep(3000);
@@ -279,12 +356,12 @@ public class CRFDataExtraction {
 		action.moveToElement(element).build().perform();
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
-
-		String PERVIDITID = "ctl07_lnkSubjectExtractionbyVisit";
+		//ImgXlExtractionVisit
+		String PERVIDITID = "//a/img[contains(@id,'ImgXlExtractionVisit')]";
 
 		// ----Per Visit Data Extraction----//
 		Thread.sleep(3500);
-		WebElement idpage = GWait.Wait_GetElementById(PERVIDITID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(PERVIDITID, 120);
 		idpage.click();
 		GlobelMethods.isAlertPresent();
 		Thread.sleep(3000);
@@ -300,12 +377,12 @@ public class CRFDataExtraction {
 		action.moveToElement(element).build().perform();
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
-
-		String PERSUBJTID = "ctl07_lnkDataExtractionperSubject";
+		//ImgXlExtractionSubject
+		String PERSUBJTID = "//a/img[contains(@id,'ImgXlExtractionSubject')]";
 
 		// ----Per Subject Data Extraction----//
 		Thread.sleep(3500);
-		WebElement idpage = GWait.Wait_GetElementById(PERSUBJTID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(PERSUBJTID, 120);
 		idpage.click();
 		GlobelMethods.isAlertPresent();
 		Thread.sleep(3000);
