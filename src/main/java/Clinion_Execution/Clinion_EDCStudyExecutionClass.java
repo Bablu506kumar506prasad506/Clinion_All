@@ -46,7 +46,7 @@ public class Clinion_EDCStudyExecutionClass {
 	public void eCRFDataExtraction() throws Exception {
 		CRFDataExtraction eCRFDE = new CRFDataExtraction();
 		eCRFDE.eCRFDataExtraction_PanelWise();
-//		eCRFDE.eCRFDataExtraction_PageWise();
+		eCRFDE.eCRFDataExtraction_PageWise();
 //		eCRFDE.eCRFDataExtraction_LabPage();
 //		eCRFDE.eCRFDataExtraction_DashBORD();
 //		eCRFDE.eCRFDataExtraction_Editcheck();
