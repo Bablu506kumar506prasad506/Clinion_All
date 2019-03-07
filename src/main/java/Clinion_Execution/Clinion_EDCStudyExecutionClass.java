@@ -48,10 +48,10 @@ public class Clinion_EDCStudyExecutionClass {
 		eCRFDE.eCRFDataExtraction_PanelWise();
 		eCRFDE.eCRFDataExtraction_PageWise();
 //		eCRFDE.eCRFDataExtraction_LabPage();
-//		eCRFDE.eCRFDataExtraction_DashBORD();
-//		eCRFDE.eCRFDataExtraction_Editcheck();
-//		eCRFDE.eCRFDataExtraction_PerVisit();
-//		eCRFDE.eCRFDataExtraction_PerSubjt();
+		eCRFDE.eCRFDataExtraction_DashBORD();
+		eCRFDE.eCRFDataExtraction_Editcheck();
+		eCRFDE.eCRFDataExtraction_PerVisit();
+		eCRFDE.eCRFDataExtraction_PerSubjt();
 	}
 	/*@Test(priority = 1)
 	public void NoteExtraction_Method() throws Exception {

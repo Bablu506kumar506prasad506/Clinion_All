@@ -357,8 +357,9 @@ public class CRFDataExtraction {
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 		//ImgXlExtractionVisit
-		String PERVIDITID = "//a/img[contains(@id,'ImgXlExtractionVisit')]";
-
+//		String PERVIDITID3point1 = "//a/img[contains(@id,'ImgXlExtractionVisit')]";
+		
+		String PERVIDITID = "//a[contains(@id,'_lnkSubjectExtractionbyVisit')]";
 		// ----Per Visit Data Extraction----//
 		Thread.sleep(3500);
 		WebElement idpage = GWait.Wait_GetElementByXpath(PERVIDITID, 120);
@@ -378,7 +379,8 @@ public class CRFDataExtraction {
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 		//ImgXlExtractionSubject
-		String PERSUBJTID = "//a/img[contains(@id,'ImgXlExtractionSubject')]";
+//		String PERVIDITID3point1 = "//a/img[contains(@id,'ImgXlExtractionSubject')]";
+		String PERSUBJTID = "//a[contains(@id,'_lnkDataExtractionperSubject')]";
 
 		// ----Per Subject Data Extraction----//
 		Thread.sleep(3500);

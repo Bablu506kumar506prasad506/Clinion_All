@@ -5,6 +5,7 @@
     <classes>
       <class name="Clinion_Execution.Clinion_EDCStudyExecutionClass">
         <methods>
+          <include name="closebrowser"/>
           <include name="BrowserInit"/>
           <include name="eCRFDataExtraction"/>
         </methods>
