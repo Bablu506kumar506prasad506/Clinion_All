@@ -33,6 +33,7 @@ import Clinion_EDC_Study.CRFDataExtraction;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
+import Clinion_CDM_Study.CRFDataExtraction3Point1;
 import Clinion_Execution.Clinion_EDCStudyExecutionClass;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -171,8 +172,8 @@ public class GlobelMethods {
 		Workbook wb = Workbook.getWorkbook(fi);
 		Sheet st = wb.getSheet("Login_Data");
 
-		String Username_Data = st.getCell(2, 2).getContents();
-		String Password_Data = st.getCell(3, 2).getContents();
+		String Username_Data = st.getCell(2, 3).getContents();
+		String Password_Data = st.getCell(3, 3).getContents();
 		GWait.Wait_GetElementById("txtUserName", 120).sendKeys(Username_Data);
 		GWait.Wait_GetElementById("txtPassword", 120).sendKeys(Password_Data);
 		GWait.Wait_GetElementByXpath("//input[@type='submit']", 120).click();
@@ -662,6 +663,268 @@ public class GlobelMethods {
 //		eCRFDataVerification();
 	}
 	
+	//-----Clinion3.1 data-----//
+	public void PageWiseMainDataVerificationClinion3Point1_M() throws Exception {
+		//------Data verification from excel and eCRF page------//
+		String DNLDfilename = CRFDataExtraction3Point1.PNL_Data.replaceAll("\\s+", "");
+		String pagename = DNLDfilename.replaceAll("/", "");
+		if (pagename.length() > 29)
+		{
+			newString = pagename.substring(0, 29);
+			System.out.println(newString);
+		}
+		else
+		{
+			newString = pagename;
+//			System.out.println(newString);
+		}
+		System.out.println("Donloaded page data: "+newString);
+		File fs = new File("C:\\Users\\bablu.p\\Downloads\\"+newString+".xlsx");
+		FileInputStream fis = new FileInputStream(fs);
+		XSSFWorkbook wb1 = new XSSFWorkbook(fis);
+		XSSFSheet st1 = wb1.getSheetAt(0);
+		
+		XSSFRow rows1 = st1.getRow(1);
+		XSSFCell SiteNameV = rows1.getCell(0);
+		String SiteName = SiteNameV.toString();
+		XSSFCell PatIDV = rows1.getCell(1);
+		String PatID = PatIDV.toString();
+		
+		js.executeScript("window.scrollBy(1000,0)");
+		Thread.sleep(500);
+		GWait.Wait_GetElementByLinkText("Data Capture").click();
+		Select eleSite = new Select(GWait.Wait_GetElementByXpath("//select[contains(@id,'_ddlSites')]", 120));
+		eleSite.selectByVisibleText(SiteName);
+		Thread.sleep(500);
+		Select elePTID = new Select(GWait.Wait_GetElementByXpath("//select[contains(@id,'_ddlSubjectId')]", 120));
+		elePTID.selectByVisibleText(PatID);
+		Thread.sleep(500);
+		WebElement eleGo = GWait.Wait_GetElementByXpath("//input[contains(@id,'_btnFilter')]", 120);
+		js.executeScript("arguments[0].click();",eleGo);
+		
+		GWait.Wait_GetElementByLinkText(PatID).click();
+		
+		XSSFCell VISTNAMEV = rows1.getCell(3);
+		String VISTNAME = VISTNAMEV.toString();
+		String TrimVisitname = " "+VISTNAME;
+		Thread.sleep(3000);
+		int sizeOfTable = GlobelMethods.driver.findElements(By.xpath("//*[@id='lstAudit']/table")).size();
+		System.out.println(sizeOfTable);
+		for (int k = 1; k < sizeOfTable; k++) {
+			WebElement visit1Name = GWait.Wait_GetElementByXpath("//*[@id=\"lstAudit\"]/table["+k+"]/tbody/tr[1]/td/div[1]", 120);
+			
+			String regex = "&nbsp;";
+			String removeStartingspaceVSTNAM = visit1Name.getText().replace(regex, "");
+			
+			System.out.println(visit1Name.getText());
+			System.out.println(TrimVisitname);
+			if (visit1Name.getText().trim().equalsIgnoreCase("Visit1")) {
+				k=k+1;
+				Thread.sleep(3000);
+				GWait.Wait_GetElementById("imgdivScrrenslist"+k+".00v", 120).click();
+				break;
+			}else {
+			if (visit1Name.getText().equals(TrimVisitname)) {
+				Thread.sleep(3000);
+				GWait.Wait_GetElementById("imgdivScrrenslist"+k+".00v", 120).click();
+				break;
+			}
+			}
+		}
+		
+		/*XSSFCell PAGENAMEV = rows1.getCell(7);
+		String PAGENAME = PAGENAMEV.toString();*/
+		System.out.println(CRFDataExtraction3Point1.PNL_Data);
+		GWait.Wait_GetElementByLinkText(CRFDataExtraction3Point1.PNL_Data).click();
+		//----Main Verification method-----//
+		/*String DNLDfilename1 = CRFDataExtraction.PNL_Data.replaceAll("\\s+", "");
+		System.out.println("Donloaded page data: "+DNLDfilename1);
+		File fs1 = new File("C:\\Users\\bablu.p\\Downloads\\"+DNLDfilename1+".xls");
+		FileInputStream fis1 = new FileInputStream(fs1);
+		XSSFWorkbook wb11 = new XSSFWorkbook(fis1);
+		XSSFSheet st11 = wb11.getSheetAt(0);*/
+		
+		List<String> PageControlId = new ArrayList<String>();
+		List<WebElement> elements = driver.findElements(By.xpath("//*[@id='divforPrint']//*"));
+		for (WebElement item : elements) {
+
+			String controlType = item.getAttribute("type");
+			String tagname = item.getTagName();
+			if (controlType == null || controlType.trim() == "") {
+				continue;
+			}
+			String controlId = item.getAttribute("id");
+
+			if (controlType.equalsIgnoreCase("text") || controlType.equalsIgnoreCase("radio")
+					|| controlType.equalsIgnoreCase("select-one") || controlType.equalsIgnoreCase("checkbox")||tagname.equalsIgnoreCase("textarea")) {
+				// System.out.println(controlId);
+				// System.out.println(controlType);
+				if (controlType.equalsIgnoreCase("radio")) {
+					WebElement parent = item.findElement(By.xpath("../../../../.."));
+					String controlIdAndType = parent.getAttribute("id") + "~" + controlType;
+					boolean controlExists = false;
+					for (String existingControlId : PageControlId) {
+						if (existingControlId.equalsIgnoreCase(controlIdAndType)) {
+							controlExists = true;
+						}
+					}
+					if (!controlExists) {
+
+						PageControlId.add(controlIdAndType);
+					}
+				} else if (controlType.equalsIgnoreCase("checkbox")) {
+					WebElement parentcheckbox = item.findElement(By.xpath("../../../../.."));
+					String controlIdAndTypecheck = parentcheckbox.getAttribute("id") + "~" + controlType;
+					boolean controlExistscheck = false;
+					for (String existingControlIdcheck : PageControlId) {
+
+						if (existingControlIdcheck.equalsIgnoreCase(controlIdAndTypecheck)) {
+							controlExistscheck = true;
+						}
+					}
+					if (!controlExistscheck) {
+
+						PageControlId.add(controlIdAndTypecheck);
+					}
+				} else {
+					PageControlId.add(controlId + "~" + controlType);
+				}
+			}
+		}
+		int numberOfRow = st1.getLastRowNum();
+		int j = 0;
+		int count = 0;
+		System.out.println("Num Of Rows in Excel: " + numberOfRow);
+		System.out.println("loop size: "+PageControlId.size());
+		for (int i = 1; i <= PageControlId.size(); i++) {
+
+			XSSFRow rows11 = st1.getRow(i);
+			int numOfCol = rows11.getLastCellNum();
+			
+			System.out.println("Num Of Columns in Excel: " + numOfCol);
+			for (j = 0; j <= numOfCol; j++) {
+				
+				XSSFCell controlDataV = rows11.getCell(6);
+				if (controlDataV==null) {
+					controlData = "";
+				}else {
+					controlData = controlDataV.toString();
+				}
+				
+//				controlData.replace("null", "");
+				try {
+					String controlIdAndType = PageControlId.get(count);
+					String controlId = controlIdAndType.split("~")[0];
+					String controlType = controlIdAndType.split("~")[1];
+					WebElement element = driver.findElement(By.id(controlId));
+
+					// System.out.println("controlId: "+controlId);
+					// System.out.println("controlType: "+controlType);
+					System.out.println("ExcelCellData: " + controlData);
+
+					switch (controlType) {
+					case "text":
+						try {
+							try {
+								System.out.println("controlData: " + element.getAttribute("value"));
+								assertEquals(controlData, element.getAttribute("value"));
+								System.out.println("Successfully done!!!");
+							} catch (Error e) {
+								System.out.println("Un-Successfully done Please Verify !!!");
+								verificationErrors.append(e.toString());
+							}
+
+						} catch (Exception e) {
+							e.getMessage();
+						}
+						break;
+					case "radio":
+						try {
+							List<WebElement> RadioButtonList = element.findElements(By.xpath(".//*"));
+							for (int radio = 0; radio < RadioButtonList.size(); radio++) {
+								if (RadioButtonList.get(radio).getAttribute("type") != null
+										&& RadioButtonList.get(radio).getAttribute("type").equalsIgnoreCase("radio")) {
+
+									if (RadioButtonList.get(radio).isSelected() && RadioButtonList.get(radio)
+											.getAttribute("value").equalsIgnoreCase(controlData.toString())) {
+										System.out.println(
+												"controlData: " + RadioButtonList.get(radio).getAttribute("value"));
+										System.out.println("Successfully done!!!");
+									} else if (RadioButtonList.get(radio).isSelected() && !RadioButtonList.get(radio)
+											.getAttribute("value").equalsIgnoreCase(controlData.toString())) {
+										System.out.println(
+												"controlData: " + RadioButtonList.get(radio).getAttribute("value"));
+										System.out.println("Un-Successfully done Please Verify !!!");
+									}
+								}
+							}
+
+						} catch (Exception e) {
+							e.getMessage();
+						}
+						break;
+					case "checkbox":
+						try {
+							List<WebElement> CheckBoxsList = driver.findElements(By.xpath(
+									"//table[@id='" + controlId + "']/tbody/tr/td/span/input[@type='checkbox']"));
+							List<String> list = Lists.newArrayList(Splitter.on(",").trimResults().split(controlData.toString()));
+							for (int checkBox = 0; checkBox < CheckBoxsList.size(); checkBox++) {
+								String xpathForInput = generateXPATH(CheckBoxsList.get(checkBox), "")
+										.replaceAll("input", "label");
+								WebElement labelElement = driver.findElement(By.xpath(xpathForInput));
+								if (CheckBoxsList.get(checkBox).isSelected() && list.contains(labelElement.getText().toLowerCase())) {
+									System.out.println("controlData: " + labelElement.getText().toLowerCase());
+									System.out.println("Successfully done!!!");
+								} else if (CheckBoxsList.get(checkBox).isSelected()
+										&& !list.contains(labelElement.getText().toLowerCase())) {
+									System.out.println("controlData: " + labelElement.getText());
+									System.out.println("Un-Successfully done Please Verify !!!");
+								}
+							}
+						} catch (Exception e) {
+							e.getMessage();
+						}
+						break;
+					case "select-one":
+						try {
+							if (element.getAttribute("type").equalsIgnoreCase("select-one")) {
+								Select se = new Select(driver.findElement(By.id(controlId)));
+								WebElement option = se.getFirstSelectedOption();
+								System.out.println("controlData: " + option.getText());
+								if (controlData.toString().equalsIgnoreCase(option.getText())) {
+									System.out.println("Successfully done!!!");
+								} else {
+									System.out.println("Un-Successfully done Please Verify !!!");
+								}
+
+							} else {
+								String checkOtherTextBox = element.getAttribute("style");
+								if (!checkOtherTextBox.equalsIgnoreCase("display: none;")) {
+									element.sendKeys(controlData.toString());
+								}
+							}
+
+						} catch (Exception e) {
+							e.getStackTrace();
+						}
+						break;
+					}
+
+				} catch (Exception e) {
+					e.getMessage();
+				}
+				count++;
+				break;
+			}
+
+			Thread.sleep(3000);
+//			driver.findElement(By.id("btnNext")).click();
+		
+		}
+	}
+	
+	
+	
 	static PrintStream verificationErrors;
 	static String controlData;
 	public static void eCRFDataVerification() throws Exception {
@@ -730,6 +993,189 @@ public class GlobelMethods {
 			for (int j = 0; j <= numOfCol; j++) {
 				
 				XSSFCell controlDataV = rows1.getCell(j+11);
+				if (controlDataV==null) {
+					controlData = "";
+				}else {
+					controlData = controlDataV.toString();
+				}
+				
+//				controlData.replace("null", "");
+				try {
+					String controlIdAndType = PageControlId.get(j);
+					String controlId = controlIdAndType.split("~")[0];
+					String controlType = controlIdAndType.split("~")[1];
+					WebElement element = driver.findElement(By.id(controlId));
+
+					// System.out.println("controlId: "+controlId);
+					// System.out.println("controlType: "+controlType);
+					System.out.println("ExcelCellData: " + controlData);
+
+					switch (controlType) {
+					case "text":
+						try {
+							try {
+								System.out.println("controlData: " + element.getAttribute("value"));
+								assertEquals(controlData, element.getAttribute("value"));
+								System.out.println("Successfully done!!!");
+							} catch (Error e) {
+								System.out.println("Un-Successfully done Please Verify !!!");
+								verificationErrors.append(e.toString());
+							}
+
+						} catch (Exception e) {
+							e.getMessage();
+						}
+						break;
+					case "radio":
+						try {
+							List<WebElement> RadioButtonList = element.findElements(By.xpath(".//*"));
+							for (int radio = 0; radio < RadioButtonList.size(); radio++) {
+								if (RadioButtonList.get(radio).getAttribute("type") != null
+										&& RadioButtonList.get(radio).getAttribute("type").equalsIgnoreCase("radio")) {
+
+									if (RadioButtonList.get(radio).isSelected() && RadioButtonList.get(radio)
+											.getAttribute("value").equalsIgnoreCase(controlData.toString())) {
+										System.out.println(
+												"controlData: " + RadioButtonList.get(radio).getAttribute("value"));
+										System.out.println("Successfully done!!!");
+									} else if (RadioButtonList.get(radio).isSelected() && !RadioButtonList.get(radio)
+											.getAttribute("value").equalsIgnoreCase(controlData.toString())) {
+										System.out.println(
+												"controlData: " + RadioButtonList.get(radio).getAttribute("value"));
+										System.out.println("Un-Successfully done Please Verify !!!");
+									}
+								}
+							}
+
+						} catch (Exception e) {
+							e.getMessage();
+						}
+						break;
+					case "checkbox":
+						try {
+							List<WebElement> CheckBoxsList = driver.findElements(By.xpath(
+									"//table[@id='" + controlId + "']/tbody/tr/td/span/input[@type='checkbox']"));
+							List<String> list = Lists.newArrayList(Splitter.on(",").trimResults().split(controlData.toString()));
+							for (int checkBox = 0; checkBox < CheckBoxsList.size(); checkBox++) {
+								String xpathForInput = generateXPATH(CheckBoxsList.get(checkBox), "")
+										.replaceAll("input", "label");
+								WebElement labelElement = driver.findElement(By.xpath(xpathForInput));
+								if (CheckBoxsList.get(checkBox).isSelected() && list.contains(labelElement.getText().toLowerCase())) {
+									System.out.println("controlData: " + labelElement.getText().toLowerCase());
+									System.out.println("Successfully done!!!");
+								} else if (CheckBoxsList.get(checkBox).isSelected()
+										&& !list.contains(labelElement.getText().toLowerCase())) {
+									System.out.println("controlData: " + labelElement.getText());
+									System.out.println("Un-Successfully done Please Verify !!!");
+								}
+							}
+						} catch (Exception e) {
+							e.getMessage();
+						}
+						break;
+					case "select-one":
+						try {
+							if (element.getAttribute("type").equalsIgnoreCase("select-one")) {
+								Select se = new Select(driver.findElement(By.id(controlId)));
+								WebElement option = se.getFirstSelectedOption();
+								System.out.println("controlData: " + option.getText());
+								if (controlData.toString().equalsIgnoreCase(option.getText())) {
+									System.out.println("Successfully done!!!");
+								} else {
+									System.out.println("Un-Successfully done Please Verify !!!");
+								}
+
+							} else {
+								String checkOtherTextBox = element.getAttribute("style");
+								if (!checkOtherTextBox.equalsIgnoreCase("display: none;")) {
+									element.sendKeys(controlData.toString());
+								}
+							}
+
+						} catch (Exception e) {
+							e.getStackTrace();
+						}
+						break;
+					}
+
+				} catch (Exception e) {
+					e.getMessage();
+				}
+				count++;
+			}
+
+			Thread.sleep(3000);
+			driver.findElement(By.id("btnNext")).click();
+			break;
+		}
+	}
+	
+	public static void eCRFDataVerificationClinion3point1() throws Exception {
+		String DNLDfilename = CRFDataExtraction3Point1.PNL_Data.replaceAll("\\s+", "");
+		System.out.println("Donloaded page data: "+DNLDfilename);
+		File fs = new File("C:\\Users\\bablu.p\\Downloads\\"+DNLDfilename+".xlsx");
+		FileInputStream fis = new FileInputStream(fs);
+		XSSFWorkbook wb1 = new XSSFWorkbook(fis);
+		XSSFSheet st1 = wb1.getSheetAt(0);
+		
+		int numberOfRow = st1.getLastRowNum();
+		System.out.println("Num Of Rows in Excel: " + numberOfRow);
+		for (int i = 1; i <= numberOfRow; ) {
+
+			List<String> PageControlId = new ArrayList<String>();
+			List<WebElement> elements = driver.findElements(By.xpath("//*[@id='divforPrint']//*"));
+			for (WebElement item : elements) {
+
+				String controlType = item.getAttribute("type");
+				String tagname = item.getTagName();
+				if (controlType == null || controlType.trim() == "") {
+					continue;
+				}
+				String controlId = item.getAttribute("id");
+
+				if (controlType.equalsIgnoreCase("text") || controlType.equalsIgnoreCase("radio")
+						|| controlType.equalsIgnoreCase("select-one") || controlType.equalsIgnoreCase("checkbox")||tagname.equalsIgnoreCase("textarea")) {
+					// System.out.println(controlId);
+					// System.out.println(controlType);
+					if (controlType.equalsIgnoreCase("radio")) {
+						WebElement parent = item.findElement(By.xpath("../../../../.."));
+						String controlIdAndType = parent.getAttribute("id") + "~" + controlType;
+						boolean controlExists = false;
+						for (String existingControlId : PageControlId) {
+							if (existingControlId.equalsIgnoreCase(controlIdAndType)) {
+								controlExists = true;
+							}
+						}
+						if (!controlExists) {
+
+							PageControlId.add(controlIdAndType);
+						}
+					} else if (controlType.equalsIgnoreCase("checkbox")) {
+						WebElement parentcheckbox = item.findElement(By.xpath("../../../../.."));
+						String controlIdAndTypecheck = parentcheckbox.getAttribute("id") + "~" + controlType;
+						boolean controlExistscheck = false;
+						for (String existingControlIdcheck : PageControlId) {
+
+							if (existingControlIdcheck.equalsIgnoreCase(controlIdAndTypecheck)) {
+								controlExistscheck = true;
+							}
+						}
+						if (!controlExistscheck) {
+
+							PageControlId.add(controlIdAndTypecheck);
+						}
+					} else {
+						PageControlId.add(controlId + "~" + controlType);
+					}
+				}
+			}
+			XSSFRow rows1 = st1.getRow(i);
+			int numOfCol = rows1.getLastCellNum();
+			int count = 0;
+			System.out.println("Num Of Columns in Excel: " + numOfCol);
+			for (int j = 0; j <= numOfCol; j++) {
+				
+				XSSFCell controlDataV = rows1.getCell(j+8);
 				if (controlDataV==null) {
 					controlData = "";
 				}else {

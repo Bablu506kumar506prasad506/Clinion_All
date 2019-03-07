@@ -4,9 +4,14 @@
 	<test thread-count="5" name="Test">
 		<classes>
 			<class name="Clinion_Execution.Clinion_EDCStudyExecutionClass">
-			<methods>
-			<include name="eCRFDataExtraction()"/>
-			</methods>
+				<methods>
+					<include name="eCRFDataExtraction()" />
+				</methods>
+			</class>
+			<class name="Clinion_Execution.Clinion_CDMStudyExecutionClass">
+				<methods>
+					<include name="eCRFDataExtractionClinion3Point1()" />
+				</methods>
 			</class>
 		</classes>
 	</test> <!-- Test -->
