@@ -10,7 +10,12 @@
 			</class>
 			<class name="Clinion_Execution.Clinion_CDMStudyExecutionClass">
 				<methods>
-					<include name="eCRFDataExtractionClinion3Point1()" />
+					<include name="eCRFDataExtractionClinion3Point1PanelWise()" />
+					<include name="eCRFDataExtractionClinion3Point1PageWise()" />
+					<include name="eCRFDataExtractionClinion3Point1DashBORD()" />
+					<include name="eCRFDataExtractionClinion3Point1Editcheck()" />
+					<include name="eCRFDataExtractionClinion3Point1PerVisit()" />
+					<include name="eCRFDataExtractionClinion3Point1PerSubjt()" />
 				</methods>
 			</class>
 		</classes>

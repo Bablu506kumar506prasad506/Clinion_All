@@ -13,6 +13,7 @@ import jxl.Workbook;
 
 public class Clinion_CDMStudyExecutionClass {
 	
+	
 	@BeforeMethod
 	public static void BrowserInit() throws Exception{
 		
@@ -28,14 +29,39 @@ public class Clinion_CDMStudyExecutionClass {
 	}
 	
 	@Test(priority = 0)
-	public void eCRFDataExtractionClinion3Point1() throws Exception {
+	public void eCRFDataExtractionClinion3Point1PanelWise() throws Exception {
 		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
 		eCRFDE.eCRFDataExtractionClinion3Point1_PanelWise();
+	}
+	
+	@Test(priority = 1)
+	public void eCRFDataExtractionClinion3Point1PageWise() throws Exception {
+		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
 		eCRFDE.eCRFDataExtractionClinion3Point1_PageWise();
-		/*eCRFDE.eCRFDataExtraction_DashBORD();
+	}
+	
+	@Test(priority = 2)
+	public void eCRFDataExtractionClinion3Point1DashBORD() throws Exception {
+		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
+		eCRFDE.eCRFDataExtraction_DashBORD();
+	}
+	
+	@Test(priority = 3)
+	public void eCRFDataExtractionClinion3Point1Editcheck() throws Exception {
+		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
 		eCRFDE.eCRFDataExtraction_Editcheck();
+	}
+	
+	@Test(priority = 4)
+	public void eCRFDataExtractionClinion3Point1PerVisit() throws Exception {
+		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
 		eCRFDE.eCRFDataExtraction_PerVisit();
-		eCRFDE.eCRFDataExtraction_PerSubjt();*/
+	}
+	
+	@Test(priority = 4)
+	public void eCRFDataExtractionClinion3Point1PerSubjt() throws Exception {
+		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
+		eCRFDE.eCRFDataExtraction_PerSubjt();
 	}
 	
 	@AfterMethod
