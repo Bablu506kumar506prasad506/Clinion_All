@@ -365,7 +365,7 @@ public class CRFDataExtraction3Point1 {
 	// -----DashBoard Data Extraction-----//
 	public void eCRFDataExtraction_DashBORD() throws Exception {
 
-		GlobelMethods.Datamanager_Login();
+		GlobelMethods.Datamanager_Login3point1();
 		Thread.sleep(3000);
 		WebElement element = GWait.Wait_GetElementByXpath("//tr/td[18]/table/tbody/tr/td[1]/a", 120);
 		action.moveToElement(element).build().perform();
@@ -387,7 +387,7 @@ public class CRFDataExtraction3Point1 {
 	// -----Edit Checks Extraction-----//
 	public void eCRFDataExtraction_Editcheck() throws Exception {
 
-		GlobelMethods.Datamanager_Login();
+		GlobelMethods.Datamanager_Login3point1();
 		Thread.sleep(3000);
 		WebElement element = GWait.Wait_GetElementByXpath("//tr/td[18]/table/tbody/tr/td[1]/a", 120);
 		action.moveToElement(element).build().perform();
@@ -409,7 +409,7 @@ public class CRFDataExtraction3Point1 {
 	// -----Per Visit Data Extraction-----//
 	public void eCRFDataExtraction_PerVisit() throws Exception {
 
-		GlobelMethods.Datamanager_Login();
+		GlobelMethods.Datamanager_Login3point1();
 		Thread.sleep(3000);
 		WebElement element = GWait.Wait_GetElementByXpath("//tr/td[18]/table/tbody/tr/td[1]/a", 120);
 		action.moveToElement(element).build().perform();
@@ -431,7 +431,7 @@ public class CRFDataExtraction3Point1 {
 	// -----Per Subject Data Extraction-----//
 	public void eCRFDataExtraction_PerSubjt() throws Exception {
 
-		GlobelMethods.Datamanager_Login();
+		GlobelMethods.Datamanager_Login3point1();
 		Thread.sleep(3000);
 		WebElement element = GWait.Wait_GetElementByXpath("//tr/td[18]/table/tbody/tr/td[1]/a", 120);
 		action.moveToElement(element).build().perform();

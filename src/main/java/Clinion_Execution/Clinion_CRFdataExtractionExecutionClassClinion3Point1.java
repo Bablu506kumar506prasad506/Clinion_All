@@ -11,7 +11,7 @@ import Clinion_GlobalMethod.GlobelMethods;
 import jxl.Sheet;
 import jxl.Workbook;
 
-public class Clinion_CDMStudyExecutionClass {
+public class Clinion_CRFdataExtractionExecutionClassClinion3Point1 {
 	
 	
 	@BeforeMethod
@@ -58,7 +58,7 @@ public class Clinion_CDMStudyExecutionClass {
 		eCRFDE.eCRFDataExtraction_PerVisit();
 	}
 	
-	@Test(priority = 4)
+	@Test(priority = 5)
 	public void eCRFDataExtractionClinion3Point1PerSubjt() throws Exception {
 		CRFDataExtraction3Point1 eCRFDE = new CRFDataExtraction3Point1();
 		eCRFDE.eCRFDataExtraction_PerSubjt();
