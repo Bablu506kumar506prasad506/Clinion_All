@@ -416,12 +416,12 @@ public class CRFDataExtraction3Point1 {
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 		//ImgXlExtractionVisit
-//		String PERVIDITID3point1 = "//a/img[contains(@id,'ImgXlExtractionVisit')]";
+		String PERVIDITID3point1 = "//a/img[contains(@id,'ImgXlExtractionVisit')]";
 		
-		String PERVIDITID = "//a[contains(@id,'_ImgXlExtractionVisit')]";
+//		String PERVIDITID = "//a[contains(@id,'_ImgXlExtractionVisit')]";
 		// ----Per Visit Data Extraction----//
 		Thread.sleep(3500);
-		WebElement idpage = GWait.Wait_GetElementByXpath(PERVIDITID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(PERVIDITID3point1, 120);
 		idpage.click();
 		GlobelMethods.isAlertPresent();
 		Thread.sleep(3000);
@@ -438,12 +438,12 @@ public class CRFDataExtraction3Point1 {
 		Thread.sleep(500);
 		GWait.Wait_GetElementByLinkText("CRF Data Extraction").click();
 		//ImgXlExtractionSubject
-//		String PERVIDITID3point1 = "//a/img[contains(@id,'ImgXlExtractionSubject')]";
-		String PERSUBJTID = "//a[contains(@id,'_ImgXlExtractionSubject')]";
+		String PERVIDITID3point1 = "//a/img[contains(@id,'ImgXlExtractionSubject')]";
+//		String PERSUBJTID = "//a[contains(@id,'_ImgXlExtractionSubject')]";
 
 		// ----Per Subject Data Extraction----//
 		Thread.sleep(3500);
-		WebElement idpage = GWait.Wait_GetElementByXpath(PERSUBJTID, 120);
+		WebElement idpage = GWait.Wait_GetElementByXpath(PERVIDITID3point1, 120);
 		idpage.click();
 		GlobelMethods.isAlertPresent();
 		Thread.sleep(3000);
