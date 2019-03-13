@@ -3,13 +3,14 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test name="Default test(failed)">
     <classes>
-      <class name="Clinion_Execution.Clinion_CDMStudyExecutionClass">
+      <class name="Clinion_Execution.Clinion_CRFdataExtractionExecutionClassClinion3Point1">
         <methods>
-          <include name="eCRFDataExtractionClinion3Point1"/>
-          <include name="closebrowser"/>
           <include name="BrowserInit"/>
+          <include name="closebrowser"/>
+          <include name="eCRFDataExtractionClinion3Point1PerSubjt"/>
+          <include name="eCRFDataExtractionClinion3Point1PerVisit"/>
         </methods>
-      </class> <!-- Clinion_Execution.Clinion_CDMStudyExecutionClass -->
+      </class> <!-- Clinion_Execution.Clinion_CRFdataExtractionExecutionClassClinion3Point1 -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -8,7 +8,7 @@
 					<include name="eCRFDataExtraction()" />
 				</methods>
 			</class>
-			<class name="Clinion_Execution.Clinion_CDMStudyExecutionClass">
+			<class name="Clinion_Execution.Clinion_CRFdataExtractionExecutionClassClinion3Point1">
 				<methods>
 					<include name="eCRFDataExtractionClinion3Point1PanelWise()" />
 					<include name="eCRFDataExtractionClinion3Point1PageWise()" />
